@@ -224,7 +224,7 @@ def read_machine_data(sample_step=100):
 
 
 
-def read_raw_data_and_preprocess_imu(sample_step: int=5, raw_data_dir: str="/home/ant/RAG/data/IMU/human+activity+recognition+using+smartphones/UCI HAR Dataset/UCI HAR Dataset/train/Inertial Signals/", y_train_path: str="/home/ant/RAG/data/IMU/human+activity+recognition+using+smartphones/UCI HAR Dataset/UCI HAR Dataset/train/y_train.txt"):
+def read_raw_data_and_preprocess_imu(sample_step: int=5, raw_data_dir: str="/home/ant/RAG/data/IMU/human+activity+recognition+using+smartphones/UCI HAR Dataset/UCI HAR Dataset/test/Inertial Signals/", y_test_path: str="/home/ant/RAG/data/IMU/human+activity+recognition+using+smartphones/UCI HAR Dataset/UCI HAR Dataset/test/y_test.txt"):
     """return :
     data_dict: dict[dict[list, list, list]]
 
@@ -248,35 +248,35 @@ def read_raw_data_and_preprocess_imu(sample_step: int=5, raw_data_dir: str="/hom
     }
     # TODO
     signal_data_paths = {
-        "body_acc_x_train_path" : raw_data_dir + "body_acc_x_train.txt",
-        "body_acc_y_train_path" :  raw_data_dir + "body_acc_y_train.txt",
-        "body_acc_z_train_path" :  raw_data_dir + "body_acc_z_train.txt",
-        "body_gyro_x_train_path" :  raw_data_dir + "body_gyro_x_train.txt",
-        "body_gyro_y_train_path" :  raw_data_dir + "body_gyro_y_train.txt",
-        "body_gyro_z_train_path" :  raw_data_dir +  "body_gyro_z_train.txt",
-        "total_acc_x_train_path" :  raw_data_dir + "total_acc_x_train.txt",
-        "total_acc_y_train_path" :  raw_data_dir + "total_acc_y_train.txt", 
-        "total_acc_z_train_path" :  raw_data_dir + "total_acc_z_train.txt",
+        "body_acc_x_test_path" : raw_data_dir + "body_acc_x_test.txt",
+        "body_acc_y_test_path" :  raw_data_dir + "body_acc_y_test.txt",
+        "body_acc_z_test_path" :  raw_data_dir + "body_acc_z_test.txt",
+        "body_gyro_x_test_path" :  raw_data_dir + "body_gyro_x_test.txt",
+        "body_gyro_y_test_path" :  raw_data_dir + "body_gyro_y_test.txt",
+        "body_gyro_z_test_path" :  raw_data_dir +  "body_gyro_z_test.txt",
+        "total_acc_x_test_path" :  raw_data_dir + "total_acc_x_test.txt",
+        "total_acc_y_test_path" :  raw_data_dir + "total_acc_y_test.txt", 
+        "total_acc_z_test_path" :  raw_data_dir + "total_acc_z_test.txt",
     }
     signal_data = {}
     for signal_data_path in signal_data_paths.keys():
         with open(signal_data_paths[signal_data_path], "r") as f:
             signal_data[signal_data_path[:-5]] = np.array([list(map(float, line.split())) for line in f])
-    with open(y_train_path, "r") as f:
-        y_train = np.array([int(line) for line in f])
-    print(Counter(y_train))
+    with open(y_test_path, "r") as f:
+        y_test = np.array([int(line) for line in f])
+    print(Counter(y_test))
     data_dict: dict[dict[list, list, list]] = {}
     # 其中有6个key，分别代表六个活动类别，每个key中有三个list，分别代表三个传感器的数据
 
     for label_id in label2ids.values():
         data_dict[label_id] = {"body_acc": [], "body_gyro": [], "total_acc": []}
 
-    for i in range(len(y_train)):
-        data_dict[y_train[i]]["body_acc"].append([np.around(signal_data["body_acc_x_train"][i][::sample_step], 3), np.around(signal_data["body_acc_y_train"][i][::sample_step], 3), np.around(signal_data["body_acc_z_train"][i][::sample_step], 3)])
+    for i in range(len(y_test)):
+        data_dict[y_test[i]]["body_acc"].append([np.around(signal_data["body_acc_x_test"][i][::sample_step], 3), np.around(signal_data["body_acc_y_test"][i][::sample_step], 3), np.around(signal_data["body_acc_z_test"][i][::sample_step], 3)])
 
-        data_dict[y_train[i]]["body_gyro"].append([np.around(signal_data["body_gyro_x_train"][i][::sample_step], 3), np.around(signal_data["body_gyro_y_train"][i][::sample_step], 3), np.around(signal_data["body_gyro_z_train"][i][::sample_step], 3)])
+        data_dict[y_test[i]]["body_gyro"].append([np.around(signal_data["body_gyro_x_test"][i][::sample_step], 3), np.around(signal_data["body_gyro_y_test"][i][::sample_step], 3), np.around(signal_data["body_gyro_z_test"][i][::sample_step], 3)])
 
-        data_dict[y_train[i]]["total_acc"].append([np.around(signal_data["total_acc_x_train"][i][::sample_step], 3), np.around(signal_data["total_acc_y_train"][i][::sample_step], 3), np.around(signal_data["total_acc_z_train"][i][::sample_step], 3)])
+        data_dict[y_test[i]]["total_acc"].append([np.around(signal_data["total_acc_x_test"][i][::sample_step], 3), np.around(signal_data["total_acc_y_test"][i][::sample_step], 3), np.around(signal_data["total_acc_z_test"][i][::sample_step], 3)])
     return data_dict, label2ids
 
 
