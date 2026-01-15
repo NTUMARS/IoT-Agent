@@ -20,8 +20,6 @@ no_demo_knowledge: {args.no_demo_knowledge}
 model: {args.model} on {args.device}
 generate results are saved in {args.output_file_path}"""
     # with rerieval:
-    # 首先，准备好document_store并写入:
-    # 得到指定文件夹下所有文件的路径
     if not args.no_domain_knowledge:
         KB_paths, _ = get_knowledge_paths(args)    
         document_store_domain = InMemoryDocumentStore()
@@ -45,7 +43,7 @@ generate results are saved in {args.output_file_path}"""
                 locals_to_release = set(locals().keys()).difference(previous_locals) 
             if previous_locals == None:
                 previous_locals = set(locals())
-            # 释放掉local所占用的内存
+  
             if locals_to_release is not None:
                 for lc in locals_to_release:
                     if lc in locals():
@@ -54,14 +52,14 @@ generate results are saved in {args.output_file_path}"""
 
 
             generator = ChatModel(args.model, args.device, args.temperature)
-            ###! 在下面的函数中根据不同的task编辑相关的信息
+            ###! 
             grd, con, template, data_des, query = task_dependent_info(args, i, data_dict, label_dict)
             ###!
 
             
             prompt_builder = PromptBuilder(template=template)
             
-            # 创建pipeline:
+            # pipeline:
             rag_pipeline = Pipeline()
             rag_pipeline.add_component("prompt_builder", prompt_builder)
             run_kwargs =  {"prompt_builder": {"query": query}}
@@ -84,7 +82,7 @@ generate results are saved in {args.output_file_path}"""
                 rag_pipeline.add_component("document_joiner_domain", document_joiner_domain)
                 rag_pipeline.add_component("ranker_domain", ranker_domain)
 
-                # 将components连接起来
+            
                 # 1. for domain-knowledge:
                 rag_pipeline.connect("text_embedder_domain", "embedding_retriever_domain")
                 rag_pipeline.connect("embedding_retriever_domain", "document_joiner_domain")
@@ -144,7 +142,7 @@ generate results are saved in {args.output_file_path}"""
                 # rag_pipeline.draw("retriver_pipeline2.png")
                 # print("draw1 done")        
                 content4retrieval_grd_demo = grd
-                # TODO: 这里当imu_multi_cls时，con有多个，会出现bug，暂时不de
+        
                 content4retrieval_con_demo = con 
                 rag_pipeline.connect("grd_ranker_demo", "prompt_builder.grd_demo")
                 rag_pipeline.connect("con_ranker_demo", "prompt_builder.con_demo")
