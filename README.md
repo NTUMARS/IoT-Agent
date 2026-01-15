@@ -50,4 +50,12 @@ IoT-Agent/
 ├── run.sh
 └── README.md
 ```
-
+# Citation:
+```
+@article{an2025iot,
+  title={IoT-LLM: A framework for enhancing large language model reasoning from real-world sensor data},
+  author={An, Tuo and Zhou, Yunjiao and Zou, Han and Yang, Jianfei},
+  journal={Patterns},
+  publisher={Elsevier}
+}
+```
