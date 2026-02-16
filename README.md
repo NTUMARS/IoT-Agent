@@ -172,8 +172,6 @@ RANKER_MODEL_LOCAL   = "BAAI/bge-reranker-base"      # or "/path/to/local/bge-re
 
 ## Preparing Your Own Task
 
-Since this repository provides the **general retrieval and inference framework**, you need to prepare three components for your specific IoT task:
-
 ### 1. Sensor Data
 
 Place your IoT sensor datasets in the **`data/`** directory, organized by task. The data loading logic resides in `common/read_data.py` — you will need to adapt or extend the data reading functions to handle your specific data format.
